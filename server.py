@@ -75,6 +75,23 @@ def update_leaderboard():
     print("pub address: " + acct.address)
     return private_key
 
+@app.route('api/mint_nft')
+def mint_nft():
+    # TODO NOT TESTED
+    # generate address
+    acct, private_key = generate_address()
+    print("Address:", acct.address)
+    print ("Private key:", private_key)
+
+    # create NFT
+    url = generate_nft(game_name, score, user_identifier)
+    print(url)
+
+    # smart contract it
+    nft_smartcontract(acct.address, url)
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
