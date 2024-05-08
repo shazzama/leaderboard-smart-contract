@@ -50,15 +50,17 @@ def update_leaderboard():
     print ("Private key:", private_key)
 
     # create NFT
-    # nft = generate_nft(game_name, score, user_identifier)
-    # print(nft)
+    nft = generate_nft(game_name, score, user_identifier)
+    print(nft)
 
     # mint NFT and leaderboards on chain 
     leaderboard_smartcontract(user_identifier, score)
-    nft_smartcontract(acct.address, score, "https://images.unsplash.com/photo-1578269174936-2709b6aeb913?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dHJvcGh5fGVufDB8fDB8fHww") 
-
+    nft_smartcontract(acct.address, score, nft)
     update_map(game_name, user_identifier)
 
+    print("we are done, here is nft:")
+    print(nft)
+    print("pub address: " + acct.address)
     return private_key
 
 if __name__ == '__main__':
