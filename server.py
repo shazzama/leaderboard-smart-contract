@@ -33,14 +33,17 @@ def get_tasks():
 @app.route('/api/update_leaderboard', methods=['POST'])
 def update_leaderboard(): 
     # fetch from api request
-    game_name = request.args.get('game_name') 
-    score = request.args.get('score')
-    user_identifier = request.args.get('user_identifier')
+    game_name = request.json.get('game_name') 
+    score = request.json.get('score')
+    user_identifier = request.json.get('user_identifier')
+    print("game_name:", game_name)
+    print ("score:", score)
+    print ("user_identifier:", user_identifier)
 
     # generate address
-    acct, private_key = generate_address()
-    print("Address:", acct.address)
-    print ("Private key:", private_key)
+    # acct, private_key = generate_address()
+    # print("Address:", acct.address)
+    # print ("Private key:", private_key)
 
     # create NFT
     nft = generate_nft(game_name, score, user_identifier)  
@@ -53,3 +56,6 @@ def update_leaderboard():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# sample req
+# curl -X POST -H "Content-Type: application/json" -d '{"game_name": "tetris", "score": "500", "user_identifier": "sam"}' http://localhost:5000/api/update_leaderboard
