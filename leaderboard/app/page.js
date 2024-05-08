@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import axios from 'axios';
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
@@ -21,6 +22,13 @@ export default function Home() {
   }; 
 
   const handleScoreSubmit = async () => {
+    axios.post('http://localhost:3000/api/score', {}).then((response) => { 
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
     // Logic to submit score
     setShowPopup(false);
   };
