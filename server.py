@@ -20,19 +20,18 @@ def update_map(game, uuid):
 # game name, score, identifier uuid
 
 @app.route('/api/highscore', methods=['GET'])
-def get_tasks():
-    topScore = 0
-    topId = "NONE"
+def get_scores():
+    scores = []
 
     game_name = request.json.get('game_name') 
     if (map.get(game_name)):
         for uuid in map.get(game_name):
-            print(uuid)
             score = get_leaderboard_for_uuid(uuid)
-            if (score > topScore):
-                topScore = score
-                topId = uuid 
-    return topId, topScore
+            scores.append({"uuid":uuid, "score": score})
+    
+    scores.sort(key=lambda x: x["score"], reverse=True)
+
+    return scores
 
 @app.route('/api/update_leaderboard', methods=['POST'])
 def update_leaderboard(): 
@@ -50,16 +49,16 @@ def update_leaderboard():
     print ("Private key:", private_key)
 
     # create NFT
-    nft = generate_nft(game_name, score, user_identifier)
-    print(nft)
+    url = generate_nft(game_name, score, user_identifier)
+    print(url)
 
     # mint NFT and leaderboards on chain 
     leaderboard_smartcontract(user_identifier, score)
-    nft_smartcontract(acct.address, score, nft)
+    nft_smartcontract(acct.address, url)
     update_map(game_name, user_identifier)
 
     print("we are done, here is nft:")
-    print(nft)
+    print(url)
     print("pub address: " + acct.address)
     return private_key
 
@@ -68,5 +67,4 @@ if __name__ == '__main__':
 
 # sample req
 # curl -X POST -H "Content-Type: application/json" -d '{"game_name": "tetris", "score": "500", "user_identifier": "sam"}' http://localhost:5000/api/update_leaderboard
-
 # curl -X GET -H "Content-Type: application/json" -d '{"game_name": "tetris"}' http://localhost:5000/api/highscore
