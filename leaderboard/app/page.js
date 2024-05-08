@@ -1,14 +1,26 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
+  const [scores, setScores] = useState([]);
 
   const addScore = async () => {
     // Logic to add score
     setShowPopup(true);
   }
+
+  useEffect(() => {
+    // Retrieve scores
+    axios.get('http://localhost:3000/api/listScores').then((response) => {
+      console.log(response.data);
+      setScores(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }, []);
 
   const [uuid, setUuid] = useState('');
   const [score, setScore] = useState(0);
@@ -56,11 +68,18 @@ export default function Home() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="px-4 py-2">1</td>
-                <td className="px-4 py-2">John</td>
-                <td className="px-4 py-2">100</td>
-              </tr>
+              {
+                scores.map((score) => {
+                  return (
+                    <tr key={score.uuid}>
+                      <td className="px-4 py-2">{score.rank}</td>
+                      <td className="px-4 py-2">{score.uuid}</td>
+                      <td className="px-4 py-2">{score.score}</td>
+                    </tr>
+                  );
+                
+                })
+              }
             </tbody>
           </table>
         </div>
