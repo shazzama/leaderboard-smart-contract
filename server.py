@@ -8,6 +8,8 @@ app = Flask(__name__)
 
 
 
+
+
 tasks = [
     {
         'id': 1,
@@ -22,6 +24,16 @@ tasks = [
         'done': False
     }
 ]
+
+# map game to uuid to high score
+map = dict()
+
+def update_map(game, uuid):
+    if (map.get(game)):
+        map[game].add(uuid)
+    else:
+        map[game] = set(uuid)
+    
 
 # things we need 
 # game name, score, identifier uuid
@@ -51,6 +63,8 @@ def update_leaderboard():
     # mint NFT and leaderboards on chain 
     leaderboard_smartcontract()
     nft_smartcontract() 
+
+    update_map(game_name, user_identifier)
 
     return "success"
 
