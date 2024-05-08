@@ -3,8 +3,12 @@ from flask import Flask, jsonify, request
 from address import generate_address
 from nft import generate_nft
 from smart_contract import leaderboard_smartcontract, nft_smartcontract, get_leaderboard_for_uuid
+from flask_cors import CORS, cross_origin
+import json
 
 app = Flask(__name__)
+CORS(app)
+# CORS(app, support_credentials=True)
 
 # map game to uuid to high score
 map = dict()
@@ -19,11 +23,17 @@ def update_map(game, uuid):
 # things we need 
 # game name, score, identifier uuid
 
+# curl -X GET -H "Content-Type: application/json" -d '{"game_name": "tetris"}' http://localhost:5000/api/highscore
 @app.route('/api/highscore', methods=['GET'])
-def get_scores():
+def highscore():
     scores = []
 
-    game_name = request.json.get('game_name') 
+    print("****************")
+    print(request.args.get('game_name'))
+    print("****************")
+    game_name = request.args.get('game_name')
+
+
     if (map.get(game_name)):
         for uuid in map.get(game_name):
             score = get_leaderboard_for_uuid(uuid)
@@ -36,9 +46,12 @@ def get_scores():
 @app.route('/api/update_leaderboard', methods=['POST'])
 def update_leaderboard(): 
     # fetch from api request
-    game_name = request.json.get('game_name') 
-    score = request.json.get('score')
-    user_identifier = request.json.get('user_identifier')
+    data = json.loads(request.data.decode('utf-8'))
+
+    print(data)
+    game_name = data['data']['game_name']
+    score = data['data']['score']
+    user_identifier = data['data']['user_identifier']
     print("game_name:", game_name)
     print ("score:", score)
     print ("user_identifier:", user_identifier)

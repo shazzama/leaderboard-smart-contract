@@ -10,12 +10,19 @@ export default function Home() {
     // Logic to add score
     setShowPopup(true);
   }
-
   useEffect(() => {
     // Retrieve scores
-    axios.get('http://localhost:3000/api/listScores').then((response) => {
+    axios.get('http://localhost:5000/api/highscore', {
+      params: {
+        game_name: "2048",
+      }
+    }).then((response) => {
       console.log(response.data);
-      setScores(response.data);
+      var dataWithRank = [];
+      for (var i=0; i<response.data.length; i++) {
+        dataWithRank.push({rank:i+1, uuid:response.data[i]["uuid"], score:response.data[i]["score"] })
+      }
+      setScores(dataWithRank);
     })
     .catch((error) => {
       console.log(error);
@@ -34,7 +41,8 @@ export default function Home() {
   }; 
 
   const handleScoreSubmit = async () => {
-    axios.post('http://localhost:3000/api/score', {}).then((response) => { 
+    // # curl -X POST -H "Content-Type: application/json" -d '{"game_name": "tetris", "score": "500", "user_identifier": "sam"}' http://localhost:5000/api/update_leaderboard
+    axios.post('http://localhost:5000/api/update_leaderboard', {data: {game_name: "2048", score: score, "user_identifier": uuid }}).then((response) => { 
       console.log(response.data);
     })
     .catch((error) => {
