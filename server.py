@@ -38,7 +38,9 @@ def update_leaderboard():
     user_identifier = request.args.get('user_identifier')
 
     # generate address
-    address = generate_address()
+    acct, private_key = generate_address()
+    print("Address:", acct.address)
+    print ("Private key:", private_key)
 
     # create NFT
     nft = generate_nft(game_name, score, user_identifier)  
