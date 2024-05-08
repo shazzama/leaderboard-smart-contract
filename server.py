@@ -2,45 +2,37 @@
 from flask import Flask, jsonify, request 
 from address import generate_address
 from nft import generate_nft
-from smart_contract import leaderboard_smartcontract, nft_smartcontract
+from smart_contract import leaderboard_smartcontract, nft_smartcontract, get_leaderboard_for_uuid
 
 app = Flask(__name__)
-
-
-
-
-
-tasks = [
-    {
-        'id': 1,
-        'title': u'Buy groceries',
-        'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-        'done': False
-    },
-    {
-        'id': 2,
-        'title': u'Learn Python',
-        'description': u'Need to find a good Python tutorial on the web',
-        'done': False
-    }
-]
 
 # map game to uuid to high score
 map = dict()
 
 def update_map(game, uuid):
     if (map.get(game)):
-        map[game].add(uuid)
+        map[game].append(uuid)
     else:
-        map[game] = set(uuid)
+        map[game] = [uuid]
     
 
 # things we need 
 # game name, score, identifier uuid
 
-@app.route('/todo/api/v1.0/tasks', methods=['GET'])
+@app.route('/api/highscore', methods=['GET'])
 def get_tasks():
-    return jsonify({'tasks': tasks})
+    topScore = 0
+    topId = "NONE"
+
+    game_name = request.json.get('game_name') 
+    if (map.get(game_name)):
+        for uuid in map.get(game_name):
+            print(uuid)
+            score = get_leaderboard_for_uuid(uuid)
+            if (score > topScore):
+                topScore = score
+                topId = uuid 
+    return topId, topScore
 
 @app.route('/api/update_leaderboard', methods=['POST'])
 def update_leaderboard(): 
@@ -74,3 +66,5 @@ if __name__ == '__main__':
 
 # sample req
 # curl -X POST -H "Content-Type: application/json" -d '{"game_name": "tetris", "score": "500", "user_identifier": "sam"}' http://localhost:5000/api/update_leaderboard
+
+# curl -X GET -H "Content-Type: application/json" -d '{"game_name": "tetris"}' http://localhost:5000/api/highscore

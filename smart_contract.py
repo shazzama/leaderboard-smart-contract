@@ -56,5 +56,15 @@ def leaderboard_smartcontract(uuid, score):
 
     print("leaderboard smartcontract")
 
+def get_leaderboard_for_uuid(uuid):
+    web3 = connect_to_web3()
+    contract, caller, nonce, private_key = initialize_smart_contract()
+    Chain_id = web3.eth.chain_id
+    score = contract.functions.getScore(uuid).call()
+    print(score)
+    return score 
+
+
+
 def nft_smartcontract():
     print("nft smartcontract")
