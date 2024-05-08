@@ -58,10 +58,11 @@ def update_leaderboard():
     # print ("Private key:", private_key)
 
     # create NFT
-    nft = generate_nft(game_name, score, user_identifier)  
+    # nft = generate_nft(game_name, score, user_identifier)
+    # print(nft)
 
     # mint NFT and leaderboards on chain 
-    leaderboard_smartcontract()
+    leaderboard_smartcontract(user_identifier, score)
     nft_smartcontract() 
 
     update_map(game_name, user_identifier)
