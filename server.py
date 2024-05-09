@@ -4,7 +4,7 @@ from address import generate_address
 from nft import generate_nft
 from smart_contract import leaderboard_smartcontract, nft_smartcontract, get_leaderboard
 from flask_cors import CORS, cross_origin
-import json
+import json, base64
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +18,18 @@ def update_map(game, uuid):
         map[game].append(uuid)
     else:
         map[game] = [uuid]
+
+
+def encode_metadata(game_name, score, user_identifier, url):
+    metadata = json.dumps({
+        "description": user_identifier + " has scored " + score + " in " + game_name,
+        "external_url": "https://www.coinbase.com/",
+        "image": url,
+        "name": "Trophy NFT for" + user_identifier,
+    })
+    return base64.b64encode(metadata.encode("utf-8")).decode("utf-8")
+
+    
     
 
 # things we need 
@@ -68,7 +80,8 @@ def update_leaderboard():
 
     # mint NFT and leaderboards on chain 
     leaderboard_smartcontract(user_identifier, score)
-    nft_smartcontract(acct.address, url)
+    uri = encode_metadata(game_name, score, user_identifier, url)
+    nft_smartcontract(acct.address, uri)
     update_map(game_name, user_identifier)
 
     print("we are done, here is nft:")
