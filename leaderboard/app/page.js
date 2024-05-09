@@ -103,14 +103,18 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col items-center justify-center">
-        <h1 className="text-4xl font-bold text-center">Leaderboard</h1>
+        <h1 class="bg-gradient-to-r text-4xl from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Onchain Leaderboard</h1>
         <br/>
         <div className="flex space-x-4">
-          <button onClick={() => {setShowPopup(true)}} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
-            Update Score
+          <button onClick={() => {setShowPopup(true)}} class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+              Update Score
+            </span>
           </button>
-          <button onClick={() => {setShowNFTPopup(true);}} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
-            Mint NFT
+          <button onClick={() => {setShowNFTPopup(true);}} class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-500 to-pink-500 group-hover:from-purple-500 group-hover:to-pink-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800">
+            <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+              Mint NFT
+            </span>
           </button>
         </div>
         <div>
@@ -143,18 +147,18 @@ export default function Home() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-gray-200">
               <h2 className="text-2xl font-bold mb-4">Update Score</h2>
+              <input value={uuid} onChange={handleUuidChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="UUID" />
+              <input value={score} onChange={handleScoreChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Enter score" />
               <div className='flex space-x-4'>
                 {
                   submitting ? <Spinner /> :
                   <>
-                    <input value={uuid} onChange={handleUuidChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="UUID" />
-                    <input value={score} onChange={handleScoreChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Enter score" />
-                    <button onClick={handleScoreSubmit} type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                      Submit
-                    </button>
-                    <button onClick={() => setShowPopup(false)} type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                      Close
-                    </button>
+                      <button onClick={handleScoreSubmit} type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                        Submit
+                      </button>
+                      <button onClick={() => setShowPopup(false)} type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                        Close
+                      </button>
                   </>
                 }
                 {
@@ -174,11 +178,11 @@ export default function Home() {
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-gray-200">
               <h2 className="text-2xl font-bold mb-4">Mint NFT</h2>
+              <input value={prompt} onChange={handlePromptChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Prompt" />
               <div className='flex space-x-4'>
                 {
                   mintingNFT ? <Spinner /> :
                   <>
-                    <input value={prompt} onChange={handlePromptChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Prompt" />
                     <button onClick={handleMintNft} type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                       Submit
                     </button>
