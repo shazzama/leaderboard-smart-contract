@@ -22,6 +22,7 @@ export default function Home() {
   const [submitting, setSubmitting] = useState(false);
   const [mintingNFT, setMintingNFT] = useState(false);
   const [txHash, setTxnHash]  = useState('');
+  const [nftUrl, setNftUrl] = useState('');
 
   useEffect(() => {
     // Retrieve scores
@@ -81,10 +82,14 @@ export default function Home() {
   const handleMintNft = async () => {
     setMintingNFT(true);
 
-    axios.post('http://localhost:5000/api/mint_nft', {data: {prompt: prompt}}).then((response) => {
+    axios.post('http://localhost:5000/api/mint_nft', {data: {
+      prompt: prompt,
+      game_name: "2048",
+      user_identifier: uuid, 
+      score: score
+    }}).then((response) => {
       console.log(response.data);
-      setTxnHash(response.data);
-
+      setNftUrl(response.data);
       setMintingNFT(false);
     })
     .catch((error) => {
@@ -183,9 +188,9 @@ export default function Home() {
                   </>
                 }
                 {
-                  txHash &&
+                  nftUrl &&
                   <>
-                    <a href={`https://sepolia.basescan.org/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">View on Basescan</a>
+                    <a href={nftUrl} target="_blank" rel="noopener noreferrer" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">View on Opensea</a>
                     <button onClick={() => setShowNFTPopup(false)} type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Close</button>
                   </>
                 }
