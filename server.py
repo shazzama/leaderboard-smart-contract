@@ -4,6 +4,7 @@ from address import generate_address
 from nft import generate_nft
 from smart_contract import leaderboard_smartcontract, nft_smartcontract, get_leaderboard
 from flask_cors import CORS, cross_origin
+import codecs
 import json, base64
 
 app = Flask(__name__)
@@ -84,7 +85,8 @@ def update_leaderboard():
     # nft_smartcontract(acct.address, uri)
     update_map(game_name, user_identifier)
 
-    return tx_hash
+    print(tx_hash.hex())
+    return tx_hash.hex()
 
 @app.route('/api/mint_nft',  methods=['POST'])
 def mint_nft():
