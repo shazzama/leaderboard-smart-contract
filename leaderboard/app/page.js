@@ -139,7 +139,7 @@ export default function Home() {
         </div>
       </div>
       {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black">
           <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-purple-600">
             <h1 class="bg-gradient-to-r text-4xl from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Update Score</h1>
               <input value={uuid} onChange={handleUuidChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="UUID" />
@@ -170,7 +170,7 @@ export default function Home() {
 
       {
         showNFTPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 flex items-center justify-center bg-black">
           <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-purple-600">
             <h1 class="bg-gradient-to-r text-4xl from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Mint NFT</h1>
               <input value={prompt} onChange={handlePromptChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Prompt" />
