@@ -79,20 +79,21 @@ def update_leaderboard():
     # print(url)
 
     # mint NFT and leaderboards on chain 
-    leaderboard_smartcontract(user_identifier, score)
-    uri = encode_metadata(game_name, score, user_identifier, url)
-    nft_smartcontract(acct.address, uri)
+    tx_hash = leaderboard_smartcontract(user_identifier, score)
+    # uri = encode_metadata(game_name, score, user_identifier, url)
+    # nft_smartcontract(acct.address, uri)
     update_map(game_name, user_identifier)
 
-    print("we are done, here is nft:")
-    print(url)
-    print("pub address: " + acct.address)
-    return private_key
+    return tx_hash
 
 @app.route('/api/mint_nft',  methods=['POST'])
 def mint_nft():
     data = json.loads(request.data.decode('utf-8'))
     prompt = data['data']['prompt']
+    game_name = data['data']['game_name']
+    user_identifier = data['data']['user_identifier']
+    score = data['data']['score']
+
     print("here is promt --------- ")
     print(prompt)
     # generate address

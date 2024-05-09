@@ -60,6 +60,7 @@ def leaderboard_smartcontract(uuid, score):
     print(tx_receipt) # Optional
 
     print("leaderboard smartcontract")
+    return tx_receipt['transactionHash']
 
 def get_leaderboard():
     contract, caller, nonce, private_key = initialize_smart_contract(LEADERBOARD_CONTRACT_ADD, LEADERBOARD_ABI)
