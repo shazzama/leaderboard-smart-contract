@@ -81,7 +81,7 @@ export default function Home() {
   const handleMintNft = async () => {
     setMintingNFT(true);
 
-    axios.post('http://localhost:5000/api/mint_nft', {data: {prompt: "2024 winner"}}).then((response) => {
+    axios.post('http://localhost:5000/api/mint_nft', {data: {prompt: prompt}}).then((response) => {
       console.log(response.data);
       setTxnHash(response.data);
 
