@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request 
 from address import generate_address
 from nft import generate_nft
-from smart_contract import leaderboard_smartcontract, nft_smartcontract, get_leaderboard_for_uuid
+from smart_contract import leaderboard_smartcontract, nft_smartcontract, get_leaderboard
 from flask_cors import CORS, cross_origin
 import json
 
@@ -33,11 +33,12 @@ def highscore():
     print("****************")
     game_name = request.args.get('game_name')
 
+    from_blockchain = get_leaderboard()
+    print(from_blockchain)
 
-    if (map.get(game_name)):
-        for uuid in map.get(game_name):
-            score = get_leaderboard_for_uuid(uuid)
-            scores.append({"uuid":uuid, "score": score})
+    for data in from_blockchain:
+        score = get_leaderboard()
+        scores.append({"uuid":data['uuid'], "score": data['score']})
     
     scores.sort(key=lambda x: x["score"], reverse=True)
 
@@ -75,7 +76,7 @@ def update_leaderboard():
     print("pub address: " + acct.address)
     return private_key
 
-@app.route('api/mint_nft')
+@app.route('/api/mint_nft')
 def mint_nft():
     # TODO NOT TESTED
     # generate address
@@ -87,7 +88,7 @@ def mint_nft():
     url = generate_nft(game_name, score, user_identifier)
     print(url)
 
-    # smart contract it
+    # smart contract
     nft_smartcontract(acct.address, url)
 
 

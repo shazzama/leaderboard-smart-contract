@@ -44,6 +44,12 @@ export default function Home() {
     // # curl -X POST -H "Content-Type: application/json" -d '{"game_name": "tetris", "score": "500", "user_identifier": "sam"}' http://localhost:5000/api/update_leaderboard
     axios.post('http://localhost:5000/api/update_leaderboard', {data: {game_name: "2048", score: score, "user_identifier": uuid }}).then((response) => { 
       console.log(response.data);
+
+      scores.array.forEach(data => {
+        if (data.uuid == uuid){
+          data.score = score
+        }
+      });
     })
     .catch((error) => {
       console.log(error);
