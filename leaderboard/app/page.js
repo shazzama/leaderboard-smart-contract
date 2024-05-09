@@ -145,8 +145,8 @@ export default function Home() {
       </div>
       {showPopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-gray-200">
-              <h2 className="text-2xl font-bold mb-4">Update Score</h2>
+          <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-purple-600">
+            <h1 class="bg-gradient-to-r text-4xl from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Update Score</h1>
               <input value={uuid} onChange={handleUuidChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="UUID" />
               <input value={score} onChange={handleScoreChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Enter score" />
               <div className='flex space-x-4'>
@@ -176,8 +176,8 @@ export default function Home() {
       {
         showNFTPopup && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-gray-200">
-              <h2 className="text-2xl font-bold mb-4">Mint NFT</h2>
+          <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-purple-600">
+            <h1 class="bg-gradient-to-r text-4xl from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">Mint NFT</h1>
               <input value={prompt} onChange={handlePromptChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Prompt" />
               <div className='flex space-x-4'>
                 {
