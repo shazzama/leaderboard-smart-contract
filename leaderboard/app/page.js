@@ -59,6 +59,17 @@ export default function Home() {
     setShowPopup(false);
   };
 
+  const mintNft = async () => {
+      axios.post('http://localhost:5000/api/mint_nft', {data: {prompt: "2024 winner"}}).then((response) => {
+        console.log(response.data);
+        alert(response.data)
+      })    .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col items-center justify-center">
@@ -68,7 +79,7 @@ export default function Home() {
           <button onClick={addScore} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
             Update Score
           </button>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
+          <button onClick={mintNft} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
             Mint NFT
           </button>
         </div>

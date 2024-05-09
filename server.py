@@ -27,7 +27,7 @@ def encode_metadata(game_name, score, user_identifier, url):
         "image": url,
         "name": "Trophy NFT for" + user_identifier,
     })
-    return base64.b64encode(metadata.encode("utf-8")).decode("utf-8")
+    return "data:application/json;base64,"+base64.b64encode(metadata.encode("utf-8")).decode("utf-8")
 
     
     
@@ -70,13 +70,13 @@ def update_leaderboard():
     print ("user_identifier:", user_identifier)
 
     # generate address
-    acct, private_key = generate_address()
-    print("Address:", acct.address)
-    print ("Private key:", private_key)
+    # acct, private_key = generate_address()
+    # print("Address:", acct.address)
+    # print ("Private key:", private_key)
 
     # create NFT
-    url = generate_nft(game_name, score, user_identifier)
-    print(url)
+    # url = generate_nft(game_name, score, user_identifier)
+    # print(url)
 
     # mint NFT and leaderboards on chain 
     leaderboard_smartcontract(user_identifier, score)
@@ -89,20 +89,28 @@ def update_leaderboard():
     print("pub address: " + acct.address)
     return private_key
 
-@app.route('/api/mint_nft')
+@app.route('/api/mint_nft',  methods=['POST'])
 def mint_nft():
-    # TODO NOT TESTED
+    data = json.loads(request.data.decode('utf-8'))
+    prompt = data['data']['prompt']
+    print("here is promt --------- ")
+    print(prompt)
     # generate address
     acct, private_key = generate_address()
-    print("Address:", acct.address)
-    print ("Private key:", private_key)
 
     # create NFT
-    url = generate_nft(game_name, score, user_identifier)
+    url = generate_nft(prompt)
+    uri = encode_metadata(game_name, score, user_identifier, url)
+
     print(url)
 
     # smart contract
-    nft_smartcontract(acct.address, url)
+    nft_smartcontract(acct.address, uri)
+    print("Address:", acct.address)
+    print ("Private key:", private_key)
+
+    return 'https://testnets.opensea.io/'+acct.address
+
 
 
 
