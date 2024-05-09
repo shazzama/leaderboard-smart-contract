@@ -27,7 +27,7 @@ def encode_metadata(game_name, score, user_identifier, url):
         "image": url,
         "name": "Trophy NFT for" + user_identifier,
     })
-    return base64.b64encode(metadata.encode("utf-8"))
+    return base64.b64encode(metadata.encode("utf-8")).decode("utf-8")
 
     
     
