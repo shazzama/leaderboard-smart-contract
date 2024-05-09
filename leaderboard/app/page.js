@@ -17,14 +17,12 @@ const Spinner = () => {
 
 export default function Home() {
   const [showPopup, setShowPopup] = useState(false);
+  const [showNFTPopup, setShowNFTPopup] = useState(false);
   const [scores, setScores] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [mintingNFT, setMintingNFT] = useState(false);
   const [txHash, setTxnHash]  = useState('');
 
-  const addScore = async () => {
-    // Logic to add score
-    setShowPopup(true);
-  }
   useEffect(() => {
     // Retrieve scores
     axios.get('http://localhost:5000/api/highscore', {
@@ -46,6 +44,7 @@ export default function Home() {
 
   const [uuid, setUuid] = useState('');
   const [score, setScore] = useState(0);
+  const [prompt, setPrompt] = useState('');
 
   const handleScoreChange = (event) => {
     setScore(event.target.value);
@@ -53,6 +52,10 @@ export default function Home() {
 
   const handleUuidChange = (event) => {
     setUuid(event.target.value);
+  }; 
+
+  const handlePromptChange = (event) => {
+    setPrompt(event.target.value);
   }; 
 
   const handleScoreSubmit = async () => {
@@ -75,13 +78,19 @@ export default function Home() {
     });
   };
 
-  const mintNft = async () => {
-      axios.post('http://localhost:5000/api/mint_nft', {data: {prompt: "2024 winner"}}).then((response) => {
-        console.log(response.data);
-        alert(response.data)
-      })    .catch((error) => {
-        console.log(error);
-      });
+  const handleMintNft = async () => {
+    setMintingNFT(true);
+
+    axios.post('http://localhost:5000/api/mint_nft', {data: {prompt: prompt}}).then((response) => {
+      console.log(response.data);
+      setTxnHash(response.data);
+
+      setMintingNFT(false);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
   }
 
   
@@ -92,10 +101,10 @@ export default function Home() {
         <h1 className="text-4xl font-bold text-center">Leaderboard</h1>
         <br/>
         <div className="flex space-x-4">
-          <button onClick={addScore} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
+          <button onClick={() => {setShowPopup(true)}} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
             Update Score
           </button>
-          <button onClick={mintNft} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
+          <button onClick={() => {setShowNFTPopup(true);}} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style={{ marginLeft: '10px' }}>
             Mint NFT
           </button>
         </div>
@@ -129,16 +138,16 @@ export default function Home() {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-gray-200">
               <h2 className="text-2xl font-bold mb-4">Update Score</h2>
-              <input value={uuid} onChange={handleUuidChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="UUID" />
-              <input value={score} onChange={handleScoreChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Enter score" />
               <div className='flex space-x-4'>
                 {
                   submitting ? <Spinner /> :
                   <>
-                    <button onClick={handleScoreSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <input value={uuid} onChange={handleUuidChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="UUID" />
+                    <input value={score} onChange={handleScoreChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Enter score" />
+                    <button onClick={handleScoreSubmit} type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                       Submit
                     </button>
-                    <button onClick={() => setShowPopup(false)} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button onClick={() => setShowPopup(false)} type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                       Close
                     </button>
                   </>
@@ -154,6 +163,37 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {
+        showNFTPopup && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="flex flex-col items-center space-y-4 p-8 rounded border-4 border-gray-200">
+              <h2 className="text-2xl font-bold mb-4">Mint NFT</h2>
+              <div className='flex space-x-4'>
+                {
+                  mintingNFT ? <Spinner /> :
+                  <>
+                    <input value={prompt} onChange={handlePromptChange} className="border border-gray-300 rounded-md px-4 py-2 text-black" placeholder="Prompt" />
+                    <button onClick={handleMintNft} type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                      Submit
+                    </button>
+                    <button onClick={() => setShowNFTPopup(false)} type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                      Close
+                    </button>
+                  </>
+                }
+                {
+                  txHash &&
+                  <>
+                    <a href={`https://sepolia.basescan.org/tx/${txHash}`} target="_blank" rel="noopener noreferrer" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">View on Basescan</a>
+                    <button onClick={() => setShowNFTPopup(false)} type="button" class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Close</button>
+                  </>
+                }
+              </div>
+          </div>
+        </div>
+        )
+      }
     </main>
   );
 }
